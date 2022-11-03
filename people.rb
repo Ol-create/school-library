@@ -49,3 +49,13 @@ class Student < Person
         "¯\(ツ)/¯"
     end
 end
+
+#Create Teacher class
+class Teacher < Person
+    @specialization
+
+    #Create constructor
+    def initialize( specialization )
+        @specialization = specialization
+    end
+end
