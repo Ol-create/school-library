@@ -12,8 +12,11 @@ class Person
 
     #Create get_info method
     def get_info
-        @id, 
+        @id,
         @name,
         @age
     end
+    def update_info = ( name, age )
+        @name = name
+        @age = age
 end
