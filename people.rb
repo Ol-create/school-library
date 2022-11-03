@@ -34,3 +34,13 @@ class Person
         return ( parent_permission || age >= 18)
     end 
 end
+
+#Create Student Class
+class Student < Person
+    @classroom
+
+    #Create constructor
+    def initialize(classroom)
+        @classroom = classroom
+    end
+end
