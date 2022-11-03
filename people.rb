@@ -9,4 +9,11 @@ class Person
         @name = name
         @parent_permission = parent_permission
     end
+
+    #Create get_info method
+    def get_info
+        @id, 
+        @name,
+        @age
+    end
 end
