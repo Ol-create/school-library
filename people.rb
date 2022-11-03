@@ -28,4 +28,9 @@ class Person
     end
 
     private :is_of_age?
+
+    #Create can_use_services? method
+    def can_use_services?
+        return ( parent_permission || age >= 18)
+    end 
 end
