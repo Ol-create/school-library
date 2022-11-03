@@ -43,4 +43,9 @@ class Student < Person
     def initialize(classroom)
         @classroom = classroom
     end
+
+    #Creat play_hooky method
+    def play_hooky
+        "¯\(ツ)/¯"
+    end
 end
