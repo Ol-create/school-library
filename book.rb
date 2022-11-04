@@ -4,14 +4,14 @@ class Book
   attr_accessor :title, :author
   attr_reader :rental
 
-  #Create constructor
+  # Create constructor
   def initialize(title, author)
     @title = title
     @author = author
     @rental = []
   end
 
-  #Create add rental method
+  # Create add rental method
   def add_rental(date, person)
     Rental.new(date, self, person)
   end
