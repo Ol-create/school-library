@@ -6,15 +6,11 @@ require './students'
 require './teacher'
 
 class App
-
   def main
     puts "Welcome to School Library App \n\n"
-
   end
-
 end
 
-
-school = App.new()
+school = App.new
 
 school.main
