@@ -6,4 +6,4 @@ class CapitalizeDecorator < BaseDecorator
   end
 end
 
-puts CapitalizeDecorator.correct_name("oluyemi paul")
+puts CapitalizeDecorator.correct_name('oluyemi paul')
