@@ -1,4 +1,4 @@
-class Rental
+class Rentals
     attr_accessor :date
     attr_reader :book, :person
   
