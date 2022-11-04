@@ -1,5 +1,6 @@
 class Rentals
   attr_accessor :date
+  
 
   #Create constructor
   def initialise(date)
