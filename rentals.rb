@@ -1,8 +1,12 @@
-class Rentals
-  attr_accessor :date
+class Rental
+    attr_accessor :date
+    attr_reader :book, :person
   
-
-  #Create constructor
-  def initialise(date)
-    @date = date
-end
+    def initialize(date, book, person)
+      @date = date
+      @book = book
+      @person = person
+      person.rentals << self
+      book.rentals << self
+    end
+  end
