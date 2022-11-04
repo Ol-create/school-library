@@ -1,8 +1,8 @@
-require_relative './Classes/student'
-require_relative './Classes/teacher'
-require_relative './Classes/book'
-require_relative './Classes/rental'
-require_relative 'get_values'
+require_relative './student'
+require_relative './teacher'
+require_relative './book'
+require_relative './rentals'
+require_relative 'get_input'
 
 class App
   attr_reader :books, :people, :rentals
