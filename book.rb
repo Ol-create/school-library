@@ -1,8 +1,7 @@
 require './rentals'
 
 class Book
-  attr_accessor :title, :author
-  attr_reader :rental
+  attr_accessor :title, :author, :rental
 
   # Create constructor
   def initialize(title, author)

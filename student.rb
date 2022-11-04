@@ -14,8 +14,9 @@ class Student < Person
   end
 
   # Create classroom
-  def classrooms(classroom)
+  def classroom=(classroom)
     @classroom = classroom
+    classroom.student.push(self) unless classroom.student.includes?(self)
   end
 
   # Creat play_hooky method
