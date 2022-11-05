@@ -1,16 +1,16 @@
+require './student'
+
 class Classroom
   attr_accessor :label
-  attr_reader :students
+  attr_reader :student_list
 
-  # Create Constructor
   def initialize(label)
     @label = label
-    @students = []
+    @student_list = []
   end
 
-  # Add student to class
   def add_student(student)
-    @students << student unless students.include?(student)
-    student.classroom = self
+    @student_list.push(student)
+    student.classrooms = self
   end
 end

@@ -1,97 +1,174 @@
-require_relative './student'
-require_relative './teacher'
-require_relative './book'
-require_relative './rentals'
-require_relative 'get_input'
+require './book'
+require './teacher'
+require './student'
+require './rental'
 
 class App
-  attr_reader :books, :people, :rentals
+  attr_reader :books, :people, :rental
 
-  def initialize(books = [], people = [], rentals = [])
-    @books = books
-    @people = people
-    @rentals = rentals
+  def initialize
+    @books = []
+    @people = []
+    @rental = []
   end
 
-  def list_all_books
-    @books.each { |book| puts "Title: \"#{book.title}\", Author: #{book.author}" }
-  end
+  def run
+    puts show_menu
 
-  def list_all_people
-    @people.each { |person| puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}" }
-  end
+    menu_list = {
+      '1' => method(:book_list),
+      '2' => method(:people_list),
+      '3' => method(:add_teacher),
+      '4' => method(:add_student),
+      '5' => method(:add_book),
+      '6' => method(:rent_book),
+      '7' => method(:rent_history)
+    }
 
-  def create_person
-    puts 'Do you want to create a student (1) or a teacher (2)? [Input the number]:'
-    input = gets.chomp
-
-    case input
-    when '1' then create_student
-    when '2' then create_teacher
+    menu = gets.chomp
+    if menu.to_i.positive? && menu.to_i <= 7
+      menu_list[menu].call
+    elsif menu == '0'
+      puts 'Thank you, come back soon.'
     else
-      puts 'Sorry, you choose a wrong option'
-      create_person
+      puts 'Please select the available options, try again.'
+      run
     end
-    puts 'Person created successfully'
   end
 
-  def create_student
-    age = age_getter
-    name = name_getter
-    parent_permission = permission_getter
-    student = Student.new(age, name, parent_permission: parent_permission)
-    people << student unless @people.include?(student)
-  end
-
-  def create_teacher
-    age = age_getter
-    name = name_getter
-    specialization = specialization_getter
-    teacher = Teacher.new(age, specialization, name)
-    people << teacher unless @people.include?(teacher)
-  end
-
-  def create_book
-    print 'Title: '
-    title = gets.chomp.capitalize
-    print 'Author: '
-    author = gets.chomp.capitalize
-    book = Book.new(title, author)
-    books << book unless @books.include?(book)
-    puts 'Book created successfully'
-  end
-
-  def create_rental
-    puts 'Select a book from the following list by number'
-    books.each_with_index do |book, index|
-      puts "#{index}) Title: #{book.title}, Author: #{book.author}"
-    end
-    book_selection = gets.chomp.to_i
-    puts
-    puts 'Select a person from the following list by number (not id)'
-    people.each_with_index do |person, index|
-      puts "#{index}) Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-    end
-    person_selection = gets.chomp.to_i
+  def show_menu
+    puts '        ╔════════╦╦╦╦╦═════════╗'
+    puts '        ║╔═╦═╦═╗ ║║╠╣╚╦═╦═╦═╦╦╗║'
+    puts '        ║║║║║║║║ ║╚╣║║║╠╬╝║╠╣║║║'
+    puts '        ║╚═╩═╣╔╝ ╚═╩╩═╩╝╚═╩╝╠╗║║'
+    puts '        ╚════╩╩═════════════╩═╩╝'
     puts ''
-    print('Enter the date of the rental (YYYY-MM-DD): ')
-    rental_date = gets.chomp
-    rental = Rental.new(rental_date, books[book_selection], people[person_selection])
-    rentals << rental
-    puts 'Rental created successfully'
+    puts 'Please type a number to select your category.'
+    puts ''
+    puts '1- List of all books'
+    puts '2- List of all people'
+    puts '3- Add a teacher'
+    puts '4- Add a student'
+    puts '5- Add a book'
+    puts '6- Rent a book'
+    puts '7- See the rental history of a person'
+    puts '0- Exit'
+    puts ''
   end
 
-  def list_all_rentals_by_id
-    puts 'Select a person from the following list by number (not id)'
-    people.each_with_index do |person, index|
-      puts "#{index}) Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+  def book_list
+    puts 'List of books:'
+    puts ''
+    @books.each_with_index do |bk, i|
+      puts "#{i + 1}- Titulo: #{bk.title}   author:  #{bk.author}"
     end
-    print 'Enter the id of the person: '
-    person_selection = gets.chomp.to_i
-    puts 'Rentals:'
-    person = people[person_selection]
-    person.rentals.each do |rental|
-      puts "Date: #{rental.date}, Book \"#{rental.book.title}\" by #{rental.book.author}"
+    show_link_to_main
+  end
+
+  def people_list
+    puts 'List of people:'
+    puts ''
+    @people.each_with_index do |peop, i|
+      puts "#{i + 1}- #{peop.class} name: #{peop.name} age: #{peop.age}"
     end
+    show_link_to_main
+  end
+
+  def show_link_to_main
+    puts ''
+    puts 'Type 0 then press enter to go to the main menu. '
+    key = gets.chomp
+    if key == '0'
+      run
+    else
+      puts 'Please type a valid option'
+      show_link_to_main
+    end
+  end
+
+  def add_book
+    puts 'Adding a new book: '
+    print 'Title: '
+    title = gets.chomp
+    print 'Author: '
+    author = gets.chomp
+    book = Book.new(title, author)
+    @books.push(book)
+    puts ''
+    puts "Book \"#{book.title}\" added successfully."
+
+    run
+  end
+
+  def add_teacher
+    puts 'Add a new teacher: '
+    print 'Age: '
+    age = gets.chomp
+    print 'Specialization: '
+    specialization = gets.chomp
+    print 'Name: '
+    name = gets.chomp
+    teacher = Teacher.new(age, specialization, name)
+    @people.push(teacher)
+    puts ''
+    puts "Teacher \"#{teacher.name}\" added correctly."
+
+    run
+  end
+
+  def add_student
+    puts 'Add a new student: '
+    print 'Age: '
+    age = gets.chomp
+    print 'Classroom: '
+    classroom = gets.chomp
+    print 'Name: '
+    name = gets.chomp
+    print 'Has parent permission true/false: '
+    parent_permission = gets.chomp
+    student = Student.new(age, classroom, name, parent_permission)
+    @people.push(student)
+    puts ''
+    puts "Student \"#{student.name}\" added successfully."
+
+    run
+  end
+
+  def rent_book
+    puts 'select a book by typing it\'s number and press enter:'
+    @books.each_with_index { |el, i| puts "#{i + 1}- #{el.title} (#{el.author})" }
+    book_index = gets.chomp
+    unless book_index.to_i.positive? && book_index.to_i <= @books.length
+      puts 'Invalid book number, Try again.'
+      rent_book
+    end
+    puts 'select a person by typing it\'s number and press enter:'
+    @people.each_with_index { |el, i| puts "#{i + 1}- #{el.name}" }
+    person_index = gets.chomp
+    unless person_index.to_i.positive? && person_index.to_i <= @people.length
+      puts 'Invalid person number, Try again.'
+      rent_book
+    end
+    print 'Rent Date (yyyy/mm/dd):'
+    rent_date = gets.chomp
+    rental = Rental.new(rent_date, @books[book_index.to_i - 1], @people[person_index.to_i - 1])
+    @rental.push(rental)
+    puts 'Book rental saved successfully.'
+    run
+  end
+
+  def rent_history
+    puts 'select a person by typing it\'s number and press enter:'
+    @people.each_with_index { |el, i| puts "#{i + 1}- #{el.name}" }
+    person_index = gets.chomp
+    unless person_index.to_i.positive? && person_index.to_i <= @people.length
+      puts 'Invalid person number, Try again.'
+      rent_book
+    end
+
+    @rental.filter do |el|
+      puts "#{el.book.title} (#{el.date})" if el.person == @people[person_index.to_i - 1]
+    end
+    show_link_to_main
   end
 end

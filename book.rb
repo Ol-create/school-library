@@ -1,22 +1,15 @@
-require './rentals'
-
 class Book
-  attr_accessor :title, :author
-  attr_reader :rental
+  attr_accessor :title, :author, :rentals
 
-  # Create constructor
   def initialize(title, author)
     @title = title
     @author = author
-    @rental = []
+    @rentals = []
   end
 
-  # Create add rental method
-  def add_rental(date, person)
+  def rent(date, person)
+    return if @rentals[@rentals.length - 1].book == self
+
     Rental.new(date, self, person)
   end
 end
-
-book = Book.new('Best Software Engineer', 'Oluyemi Paul, O.')
-puts book.title
-# => Best Software Engineer

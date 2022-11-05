@@ -1,17 +1,17 @@
 require './person'
 
-# Create Teacher class
 class Teacher < Person
   attr_reader :specialization
 
-  # Create constructor
-  def initialize(specialization, _age, _name = 'unknown', _parent_permission: true)
-    super(@age, @name, @parent_permission)
+  def initialize(age, specialization, name = 'unknown', parent_permission: nil)
+    @name = name
+    @age = age
+    @parent_permission = parent_permission
     @specialization = specialization
+    super(@age, @name, @parent_permission)
   end
 
-  # Create can_use_services? method to override can_use_services in Person class
-  def can_use_services?
+  def can_use_services
     true
   end
 end

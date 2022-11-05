@@ -1,43 +1,38 @@
-require 'SecureRandom'
 require './nameable'
 require './capitalize_decorator'
-require './trimmed_decorator'
+require './trimmer_decorator'
+require './rental'
 
 class Person < Nameable
-  attr_accessor :name, :age, :parent_permission
   attr_reader :id
+  attr_accessor :name, :age, :rentals
 
-  def initialize(age, name = 'Unknown', parent_permission: true)
+  def initialize(age, name = 'Unknown', parent_permission = nil)
     super()
-    @id = SecureRandom.uuid
-    @name = name
     @age = age
+    @name = name
+    parent_permission = true if parent_permission.nil?
     @parent_permission = parent_permission
+    @rentals = []
   end
-
-  def of_age?
-    @age >= 18
-  end
-
-  private :of_age?
 
   def can_use_services?
-    of_age? || @parent_permission
+    true if of_age(@age) == true || parent_permission == true
   end
 
   def correct_name
     @name
   end
+
+  def rent(date, book)
+    return if @rentals.length.positive? && @rentals[@rentals.length - 1].person == self
+
+    Rental.new(date, book, self)
+  end
+
+  # private
+
+  def of_age?
+    @age >= 18
+  end
 end
-
-person = Person.new(22, 'maximilianus')
-puts person.name
-# => maximilianus
-
-capitalized_person = CapitalizeDecorator.new(person)
-puts capitalized_person.correct_name
-# => Maximilianus
-
-capitalized_trimmed_person = TrimmerDecorator.new(capitalized_person)
-puts capitalized_trimmed_person.correct_name
-# => Maximilian
